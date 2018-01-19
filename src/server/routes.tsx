@@ -1,8 +1,10 @@
 import * as Router from 'koa-router';
 
 import * as React from 'react';
+import { StaticRouter } from 'react-router-dom';
 import { BasePage } from './BasePage';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { App } from '../components/App';
 
 const router = new Router();
 
@@ -18,9 +20,16 @@ const clientScripts = [
 const clientCss: string[] = [];
 
 router.get('/*', async (ctx) => {
-    const appBody = 
+
+    const routerContext = {};
+    const appBody = renderToString(
+        <StaticRouter location={ctx.url} context={routerContext}>
+            <App />
+        </StaticRouter>
+    );
+
     ctx.body = renderToStaticMarkup(
-        <BasePage title="RevCRM" scripts={clientScripts} css={clientCss} />
+        <BasePage title="RevCRM" scripts={clientScripts} css={clientCss} content={appBody} />
     );
 });
 

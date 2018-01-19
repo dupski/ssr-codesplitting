@@ -18,7 +18,7 @@ export function BasePage(props: IBasePageProps) {
                 ))}
             </head>
             <body style={{background: '#EEEEEE'}}>
-                <div id="app">Loading...</div>
+                <div id="app" dangerouslySetInnerHTML={{__html: props.content}}></div>
                 {props.scripts.map((url, idx) => (
                     <script src={url} key={idx} />
                 ))}
